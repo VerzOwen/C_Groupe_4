@@ -1,110 +1,140 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "users.h"
+#include "projet.h"
 
+unsigned addUser(struct user newUser){
 
-// Vérifie si le login correspond à un login dans le fichier user
-// Si c'est le cas, vérifie si le mot de passe entrer correspond 
-// au mot de passe lié au login.
-// Si tout est correct, la fonction renvoie 1 sinon 0
-unsigned connexion(char login, char passWord; char erreur){
+    int ajout;
+    int exist;
+
+    //exist=checkExistPlayer( addNewUser.login);
     
-    int connexion=0;
-    int i=0;
+    //strcpy(addNewUser.login, "AdminLog");
+    //strcpy(addNewUser.passWord, "AdminPWD");
 
-    while((!EOF) || (login==login)){
-        if(login=login){
-            if(passWord=passWD){
-                connexion=1;
-            } else strcpy(erreur, "Mot de passe incorrect");
-        } else strcpy(erreur, "Login incorrect");
+    FILE *users=NULL;
+    users=fopen("users.txt","a+");
 
-    return connexion;
-}
+        fwrite(&newUser, sizeof(newUser), 1, users);    
+        ajout = 1;
 
+    fclose(users);
+    /*switch (exist)
+    {
+    case 0:
+        
+        if(strlen(addNewUser.passWord)<21){
 
-
-
-// Vérifie si le login ne correspond à aucun déja crée puis
-// Vérifie si le mot de passe mesure bien moins de 21 caractères
-// Chiffre le mot de passe si c'est correct
-// Renvoie 1 si tout est correct sinon 0
-unsigned addUser(char login, char passWord, char erreur){
-
-    int ajout=0;
-
-    while((!EOF) || (login==login)){
-        if(login!=login){
-            strcpy(login, login);
-            if(strlen(passWord)<21){
-                chiffrement(passWord);
+            //if(chiffrement(newPassWord)==1){}
                 ajout=1;
-            } else strcpy(erreur, "Mot de passe trop court"); 
-        }  else strcpy(erreur, "Login déja éxistant");
-    }
+                fwrite(&addNewUser, sizeof(addNewUser), 1, users);
+                //Si ajout = 1 alors "Le mot de passe doit faire au moins 8 caractères, ne doit pas dépasser les 20, doit avoir un chiffre et une maj"
+        }   //else(strcpy(erreur, "Mot de passe trop court"));
+        break;
 
+    case 1:
+        printf("test");
+        ajout=0;
+        //strcpy(erreur, "Login déja éxistant");
+        // Login déja éxistant 
+        break;
+
+    }*/
 
     return ajout;
 }
 
+// Vérifie si le login et mot de passe respecte les critères
 
-
-
-// Retourne 1 si le login est changé sinon 0
-unsigned modifyLogin(char login, char newLog){
-
-    int modif=0;
-
-    while((!EOF) || (login==login)){
-        if(login=login){
-            login=newLog;
-            modif=1;
-        }
-    }
-
-    return modif;
-}
-
-
-
-
-// Retourne 1 si le mot de passe est changé sinon 0
-unsigned modifyPassWord(char login, char newPassWord){
+unsigned checkLogin(struct user newUser){
     
-    int modif=0;
+    int correct;
 
-    while((!EOF) || (login==login)){
-        if(login=login){
-            passWord=newPassWord;
-            modif=1;
-        }
+    if((strlen(newUser.login) < 21) && strlen(newUser.login) > 8){
+        correct = 1;
+    } else correct = 0;
+
+    return correct;
+}
+
+unsigned checkPwd(struct user newUser){
+    
+    int correct;
+
+    if((strlen(newUser.passWord) < 21) && strlen(newUser.passWord) > 8){
+        correct = 1;
+    } else correct = 0;
+
+    return correct;
+}
+
+//Vérifie si le Login éxiste déja. Retourne 1 si c'est le cas, sinon retourne 0
+
+unsigned checkExistUser(struct user newUser){
+
+    int trouve=0;
+    struct user User;
+
+    FILE *users=NULL;
+    users=fopen("users.txt","r");
+    fseek(users, 0, SEEK_SET);
+
+    while((!feof(users)) || (trouve!=1)){
+        fread(&User, sizeof(struct user), 1, users);
+        
+        if((strcmp(User.login, newUser.login))==0) {
+
+            trouve=1;
+
+        } 
     }
 
-    return modif;
+    return trouve;
 }
 
+/*unsigned test();
 
-
-
-// Retourne 1 si l'utilisateur est supprimé sinon 0
-unsigned deleteUser(char login){
-
-    int suppression=0;
-
-    while((!EOF) || (login==login)){
-        if(login=login){
-            login=0;
-            suppression=1;
-        }
+unsigned test(){
+     FILE *outfile;
+     
+    // open file for writing
+    outfile = fopen ("users.txt", "a+");
+    if (outfile == NULL)
+    {
+        fprintf(stderr, "\nError opened file\n");
+        exit (1);
     }
+ 
+    struct user input1 = {"test", "sharma"};
+    struct user input2 = {"mahendra", "dhoni"};
+     
+    // write struct to file
+    fwrite (&input1, sizeof(struct user), 1, outfile);
+    fwrite (&input2, sizeof(struct user), 1, outfile);
 
-    return suppression;
+    return 1;
+     
+}*/
+
+int main(){
+    struct user newUser = {"AdminLog", "AdminPwD"};
+    int ajoutUser;
+    char erreur;
+    int exist;
+    exist = checkExistUser(newUser);
+    //ajoutUser=addUser(newUser);
+    printf("%d", exist);
+    sleep(1000);
 }
 
 
+/*main{
 
+  Struct
+  Appel checkLogin
+  Appel checkPassWord
 
+  Si c'est bon : Appel checkExistPlayer
 
-char chiffrement(char passWord){
+  Si joueur n'éxiste pas : Appel addUser
 
 }
+*/

@@ -1,5 +1,5 @@
-#include "../header/users.h"
-#include "../unity/unity.h"
+#include "../src/projet.h"
+
 
 #define DIM 100
 
@@ -12,9 +12,12 @@ void setUp(void)
 }
 
 
+
 int main()
 {
+    printf("TEST UTILISATEURS\n=================\n\n");
     UNITY_BEGIN();
+
     UNITY_END();
     return 0;
 }

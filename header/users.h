@@ -1,11 +1,15 @@
 #ifndef TEST_H_INCLUDED
 #define TEST_H_INCLUDED
 
-unsigned connexion(char login, char passWord);
-unsigned addUser(char login, char passWord);
-unsigned modifyLogin(char login);
-unsigned modifyPassWord(char login, char passWord);
-unsigned deleteUser(char login);
-char chiffrement(char passWord);
+struct user{
+    char login[20];
+    char passWord[20];
+};
+
+unsigned addUser(struct user newUser);
+unsigned checkLogin(struct user newUser);
+unsigned checkPwd(struct user newUser);
+unsigned checkExistUser(struct user newUser);
+
 
 #endif // TEST_H_INCLUDED
