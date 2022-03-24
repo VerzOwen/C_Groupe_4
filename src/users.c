@@ -37,11 +37,11 @@ unsigned addUser(struct user newUser){
 
 
 // Vérifie si le login et mot de passe respecte les critères
-unsigned checkLogin(char *login){
-    
+unsigned checkLogin(struct user newUser){
+
     int correct;
 
-    if((strlen(login) < 21) && strlen(login) > 7){
+    if((strlen(newUser.login) < 21) && strlen(newUser.login) > 7){
         correct = 1;
     } else correct = 0;
 
@@ -81,7 +81,7 @@ unsigned checkExistUser(struct user newUser){
 
         }
     }
-
+    fclose(users);
     return trouve;
 }
 
@@ -107,40 +107,46 @@ unsigned checkCorrectPassWord(struct user User){
 
         } 
     }
+    fclose(users);
     return correct;
 }
 
 
 
-/*unsigned modification(struct user User, struct user modifUser){
+unsigned modification(struct user User, struct user modifUser){
     
-    int modif, trouve;
+    int modif; 
+    int trouve=0;
 
     FILE *users=NULL;
     users=fopen("users.txt","a+");
 
     while(!feof(users) && trouve==0){
-        
+        printf("test2");
         fread(&User, sizeof(struct user), 1, users);
         //fscanf(users,"%s %s \n",User.login,User.passWord);
         
         if((strcmp(User.login, modifUser.login))==0) {
-            
+            printf("test1");
             trouve=checkExistUser(modifUser);
-
+            
             if(trouve!=0){
-
-                User.login = modifUser.login;
-                User.passWord = modifUser.passWord;
+                printf("testmodif1");
+                /*fseek(users, -sizeof(&User), SEEK_CUR);
+                fwrite(&modifUser, sizeof(modifUser), 1, users);*/
+                strcpy(User.login, modifUser.login);
+                strcpy(User.passWord, modifUser.passWord);
+                fwrite(&User, sizeof(struct user), 1, users);
                 modif=1;
 
             }   else modif=0;
 
         }
     }
-
+    fclose(users);
+    printf("%d", modif);
     return modif;
-}*/
+}
 
 
 
@@ -181,23 +187,42 @@ char *decrypt(char *passWord)
 
 
 int main(){
-    struct user User; // = {"BenjaminP", "BenjaminPwD"};
+    struct user User; //= {"testuser2","testpwd2"}; // = {"BenjaminP", "BenjaminPwD"};
+    struct user newUser;
+    struct user modifUser;
     int i, connexion;
     int ajoutUser;
     char erreur;
     int exist;
+    int modif;
 
     printf("Entrer un login : ");
     scanf("%s", &User.login);
-    printf("Entrer un mot de passe : ");
+    printf("Entrer un mot de passe modif : ");
+    scanf("%s", &User.passWord);
+
+
+    printf("Entrer le nouveau login : ");
+    scanf("%s", &modifUser.login);
+    printf("Entrer le nouveau mot de passe modif : ");
     /*for(i = 0 ; (User.passWord[i] = getch()) != '\r'; i++){
         printf("*");
     }*/
-    scanf("%s", &User.passWord);
+    scanf("%s", &modifUser.passWord);
 
-    connexion=identification(User);
 
-    //printf("%d", connexion);
+    // Test modif
+    modif=modification(User, modifUser);
+
+    if(modif==1){
+        printf("Modification effectuee");
+    }   else printf("Echec de la modification");
+    
+    
+    // Test Connexion
+    /*connexion=identification(newUser);
+
+    printf("%d", connexion);
 
     if(connexion==2){
         printf("connexion réussie"); 
@@ -207,14 +232,18 @@ int main(){
         printf("Mot de passe incorrect");
     }
 
-    printf("\n%d", connexion);
+    printf("\n%d", connexion);*/
     /*if(connexion=identification(User)){
         printf("Connexion réussie");
     } else printf("Connexion échouée");*/
 
 
-    /*if((checkLogin(newUser.login))==1){
+
+    // Test ajout
+    /*if((checkLogin(newUser))==1){
+        printf("test1");
         if((checkPwd(newUser))==1){
+            printf("test2");
             exist = checkExistUser(newUser);
             if(exist==0){
                 ajoutUser=addUser(newUser);
