@@ -1,5 +1,5 @@
-#ifndef TEST_H_INCLUDED
-#define TEST_H_INCLUDED
+#ifndef USERS_H_INCLUDED
+#define USERS_H_INCLUDED
 
 struct user{
     char login[20];
@@ -17,4 +17,4 @@ unsigned checkCorrectPassWord(struct user User);
 /*char * encrypt(char passWord[]);
 char *decrypt(char passWord[]);*/
 
-#endif // TEST_H_INCLUDED
+#endif 
