@@ -1,6 +1,6 @@
-#include "projet.h"
+#include "../header/users.h"
 
-unsigned identification(struct user connectUser){
+unsigned connexion(struct user connectUser){
 
     int exist;
     int pwd;
@@ -186,7 +186,7 @@ char *decrypt(char *passWord)
 
 
 
-int main(){
+/*int main(){
     struct user User; //= {"testuser2","testpwd2"}; // = {"BenjaminP", "BenjaminPwD"};
     struct user newUser;
     struct user modifUser;
@@ -204,11 +204,11 @@ int main(){
 
     printf("Entrer le nouveau login : ");
     scanf("%s", &modifUser.login);
-    printf("Entrer le nouveau mot de passe modif : ");
+    printf("Entrer le nouveau mot de passe modif : ");*/
     /*for(i = 0 ; (User.passWord[i] = getch()) != '\r'; i++){
         printf("*");
     }*/
-    scanf("%s", &modifUser.passWord);
+    /*scanf("%s", &modifUser.passWord);
 
 
     // Test modif
@@ -216,7 +216,7 @@ int main(){
 
     if(modif==1){
         printf("Modification effectuee");
-    }   else printf("Echec de la modification");
+    }   else printf("Echec de la modification");*/
     
     
     // Test Connexion
@@ -255,8 +255,8 @@ int main(){
     //ajoutUser=addUser(newUser);
     //printf("ajout effectue");
     //printf("%d", exist);
-    sleep(1000);
-}
+    /*sleep(1000);
+}*/
 
 
 /*main{
