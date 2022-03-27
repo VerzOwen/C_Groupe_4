@@ -1,6 +1,6 @@
 #include "../header/users.h"
 
-unsigned connexion(struct user connectUser){
+/*unsigned connexion(struct user connectUser){
 
     int exist;
     int pwd;
@@ -13,7 +13,7 @@ unsigned connexion(struct user connectUser){
     } else correct=0;
 
     return correct;
-}
+}*/
 
 
 
@@ -47,6 +47,8 @@ unsigned checkLogin(struct user newUser){
 
     return correct;
 }
+
+
 
 unsigned checkPwd(struct user newUser){
     
@@ -85,7 +87,6 @@ unsigned checkExistUser(struct user newUser){
     return trouve;
 }
 
-
 // Vérifie si le MDP donné correspond au login. Retourne 1 si c'est le cas, sinon retourne 0
 unsigned checkCorrectPassWord(struct user User){
 
@@ -99,13 +100,14 @@ unsigned checkCorrectPassWord(struct user User){
     while(!feof(users) && correct==0){
         
         fread(&pwdUser, sizeof(struct user), 1, users);
-        //fscanf(users,"%s %s \n",pwdUser.login,pwdUser.passWord);
-        
-        if((strcmp(pwdUser.passWord, User.passWord))==0) {
-            
-            correct=1;
 
-        } 
+        if(strcmp(pwdUser.login, User.login)){
+            if((strcmp(pwdUser.passWord, User.passWord))==0) {
+                correct=1;
+            } 
+        }
+        //fscanf(users,"%s %s \n",pwdUser.login,pwdUser.passWord);
+         
     }
     fclose(users);
     return correct;
@@ -113,44 +115,81 @@ unsigned checkCorrectPassWord(struct user User){
 
 
 
-unsigned modification(struct user User, struct user modifUser){
+unsigned modifyUser(struct user User, struct user modifUser){
     
-    int modif; 
+    int modif=0; 
     int trouve=0;
+    struct user modifyUser;
 
     FILE *users=NULL;
-    users=fopen("users.txt","a+");
+    FILE *modifFile=NULL;
+    users=fopen("users.txt","r");
+    modifFile=fopen("delete.txt", "a+");
 
-    while(!feof(users) && trouve==0){
-        printf("test2");
-        fread(&User, sizeof(struct user), 1, users);
+    while(!feof(users)){
+        fread(&modifyUser, sizeof(struct user), 1, users);
+
         //fscanf(users,"%s %s \n",User.login,User.passWord);
         
-        if((strcmp(User.login, modifUser.login))==0) {
-            printf("test1");
+        if((strcmp(modifyUser.login, User.login))==0) {
             trouve=checkExistUser(modifUser);
             
-            if(trouve!=0){
-                printf("testmodif1");
-                /*fseek(users, -sizeof(&User), SEEK_CUR);
-                fwrite(&modifUser, sizeof(modifUser), 1, users);*/
-                strcpy(User.login, modifUser.login);
-                strcpy(User.passWord, modifUser.passWord);
-                fwrite(&User, sizeof(struct user), 1, users);
+            if(trouve==0){
+                strcpy(modifyUser.login, modifUser.login);
+                strcpy(modifyUser.passWord, modifUser.passWord);
+                fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
                 modif=1;
+                
 
-            }   else modif=0;
+            }   else {
 
+                }
+
+        }   else {
+            fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
         }
     }
+
     fclose(users);
-    printf("%d", modif);
+    fclose(modifFile);
+    remove("users.txt");
+    rename("delete.txt","users.txt");
+
     return modif;
+}
+
+unsigned deleteUser(struct user User){
+    
+    int delete=0; 
+    int trouve=0;
+    struct user delUser;
+
+    FILE *users=NULL;
+    FILE *delFile=NULL;
+    users=fopen("users.txt","r");
+    delFile=fopen("delete.txt", "a+");
+
+    while(!feof(users)){
+        fread(&delUser, sizeof(struct user), 1, users);
+        //fscanf(users,"%s %s \n",User.login,User.passWord);
+        
+        if((strcmp(delUser.login, User.login))==0) {
+            delete=1;
+        }   else {
+            fwrite(&delUser, sizeof(delUser), 1, delFile);
+        }
+    }
+
+    fclose(users);
+    fclose(delFile);
+    remove("users.txt");
+    rename("delete.txt","users.txt");
+    return delete;
 }
 
 
 
-/*char * encrypt(char *passWord)
+char * encrypt(char *passWord)
 {
     int k;
     int limit;
@@ -182,11 +221,11 @@ char *decrypt(char *passWord)
         }
 
     return(passWord);
-}*/
+}
 
 
-
-/*int main(){
+/*
+int main(){
     struct user User; //= {"testuser2","testpwd2"}; // = {"BenjaminP", "BenjaminPwD"};
     struct user newUser;
     struct user modifUser;
@@ -195,30 +234,61 @@ char *decrypt(char *passWord)
     char erreur;
     int exist;
     int modif;
+    int delete;
 
     printf("Entrer un login : ");
     scanf("%s", &User.login);
     printf("Entrer un mot de passe modif : ");
     scanf("%s", &User.passWord);
 
+    strcpy(User.passWord, encrypt(User.passWord));
 
-    printf("Entrer le nouveau login : ");
+    ajoutUser=addUser(User);
+    printf("%s", User.passWord);
+    decrypt(User.passWord);
+    printf("%s", User.passWord);*/
+
+    /*modif = checkCorrectPassWord(User);
+
+    if (modif==1){
+        printf("Mot de passe correct");
+    }   else printf("Mot de passe incorrect");*/
+    
+    /*printf("Entrer le nouveau login : ");
     scanf("%s", &modifUser.login);
-    printf("Entrer le nouveau mot de passe modif : ");*/
-    /*for(i = 0 ; (User.passWord[i] = getch()) != '\r'; i++){
-        printf("*");
-    }*/
-    /*scanf("%s", &modifUser.passWord);
+    printf("Entrer le nouveau mot de passe modif : ");
+    
+    scanf("%s", &modifUser.passWord);
 
 
     // Test modif
-    modif=modification(User, modifUser);
+    modif=modifyUser(User, modifUser);
 
     if(modif==1){
         printf("Modification effectuee");
-    }   else printf("Echec de la modification");*/
+    }   else printf("Echec de la modification");
     
-    
+    *//*
+    sleep(1000);
+}*/
+
+
+/*main{
+
+  Struct
+  Appel checkLogin
+  Appel checkPassWord
+
+  Si c'est bon : Appel checkExistPlayer
+
+  Si joueur n'éxiste pas : Appel addUser
+
+}
+*/
+
+/*for(i = 0 ; (User.passWord[i] = getch()) != '\r'; i++){
+        printf("*");
+    }*/
     // Test Connexion
     /*connexion=identification(newUser);
 
@@ -255,19 +325,3 @@ char *decrypt(char *passWord)
     //ajoutUser=addUser(newUser);
     //printf("ajout effectue");
     //printf("%d", exist);
-    /*sleep(1000);
-}*/
-
-
-/*main{
-
-  Struct
-  Appel checkLogin
-  Appel checkPassWord
-
-  Si c'est bon : Appel checkExistPlayer
-
-  Si joueur n'éxiste pas : Appel addUser
-
-}
-*/
