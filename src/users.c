@@ -126,9 +126,9 @@ unsigned modifyUser(struct user User, struct user modifUser){
     FILE *modifFile=NULL;
     users=fopen("users.txt","r");
     modifFile=fopen("delete.txt", "a+");
-
+    fread(&modifyUser, sizeof(struct user), 1, users);
     while(!feof(users)){
-        fread(&modifyUser, sizeof(struct user), 1, users);
+
 
         //fscanf(users,"%s %s \n",User.login,User.passWord);
         
@@ -148,6 +148,7 @@ unsigned modifyUser(struct user User, struct user modifUser){
         }   else {
             fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
         }
+        fread(&modifyUser, sizeof(struct user), 1, users);
     }
 
     fclose(users);
@@ -171,8 +172,9 @@ unsigned deleteUser(struct user User){
     users=fopen("users.txt","r");
     delFile=fopen("delete.txt", "a+");
 
+    fread(&delUser, sizeof(struct user), 1, users);
+
     while(!feof(users)){
-        fread(&delUser, sizeof(struct user), 1, users);
         //fscanf(users,"%s %s \n",User.login,User.passWord);
         
         if((strcmp(delUser.login, User.login))==0) {
@@ -180,6 +182,7 @@ unsigned deleteUser(struct user User){
         }   else {
             fwrite(&delUser, sizeof(delUser), 1, delFile);
         }
+        fread(&delUser, sizeof(struct user), 1, users);
     }
 
     fclose(users);
@@ -224,24 +227,26 @@ char *decrypt(char *passWord)
 
     return(passWord);
 }
-
-//int main(){
-  //  int checkpwd,add, modif;
-    /*printf("Entrer un login : ");
+/*
+int main(){
+    int checkpwd,add, modif;
+*/
+   /* printf("Entrer un login : ");
     scanf("%s", &User.login);
     printf("Entrer un mot de passe modif : ");
-    scanf("%s", &User.passWord);
-*/
+    scanf("%s", &User.passWord);*/
 
-    //struct user User = {"testuser10", "testpwd10"};
+
+  //  struct user User = {"testuser1", "testuser1"};
     //struct user modifUser = {"testuser15", "testpwd15"};
 //add=addUser(User);
-    //modif=modifyUser(User, modifUser);
+   // modif=modifyUser(User, modifUser);
 
     //if(modif==1){
       //  printf("modifier");
     //}   else printf("pas modif");
-    //sleep(1000);
+    
+//sleep(1000);
 //}
     /*checkpwd=checkCorrectPassWord(User);
 
