@@ -80,7 +80,7 @@ void test_checkCorrectPassWordIncorrect(){
 
 // Test modifyUser
 void test_modifyUserCorrect(){
-    struct user User = {"testuser1", "testpwd1"};
+    struct user User = {"testuser2", "testpwd2"};
     struct user modifUser = {"testuser10", "testpwd10"};
     TEST_ASSERT_EQUAL_INT( 1, modifyUser(User, modifUser));
 }

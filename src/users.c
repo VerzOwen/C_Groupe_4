@@ -91,17 +91,18 @@ unsigned checkExistUser(struct user newUser){
 unsigned checkCorrectPassWord(struct user User){
 
     int correct=0;
-
+    int egal;
     struct user pwdUser;
 
     FILE *users=NULL;
     users=fopen("users.txt","r+");
 
     while(!feof(users) && correct==0){
-        
+
         fread(&pwdUser, sizeof(struct user), 1, users);
 
-        if(strcmp(pwdUser.login, User.login)){
+        if((strcmp(pwdUser.login, User.login))==0){
+            printf("test1");
             if((strcmp(pwdUser.passWord, User.passWord))==0) {
                 correct=1;
             } 
@@ -139,7 +140,6 @@ unsigned modifyUser(struct user User, struct user modifUser){
                 strcpy(modifyUser.passWord, modifUser.passWord);
                 fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
                 modif=1;
-                
 
             }   else {
 
@@ -152,6 +152,8 @@ unsigned modifyUser(struct user User, struct user modifUser){
 
     fclose(users);
     fclose(modifFile);
+    printf("%d", modif);
+    printf("moddddddddddddddddddddddddddddddddd");
     remove("users.txt");
     rename("delete.txt","users.txt");
 
@@ -223,7 +225,31 @@ char *decrypt(char *passWord)
     return(passWord);
 }
 
+//int main(){
+  //  int checkpwd,add, modif;
+    /*printf("Entrer un login : ");
+    scanf("%s", &User.login);
+    printf("Entrer un mot de passe modif : ");
+    scanf("%s", &User.passWord);
+*/
 
+    //struct user User = {"testuser10", "testpwd10"};
+    //struct user modifUser = {"testuser15", "testpwd15"};
+//add=addUser(User);
+    //modif=modifyUser(User, modifUser);
+
+    //if(modif==1){
+      //  printf("modifier");
+    //}   else printf("pas modif");
+    //sleep(1000);
+//}
+    /*checkpwd=checkCorrectPassWord(User);
+
+    if(checkpwd==1){
+        printf("mdp ok");
+    }   else printf("mdp no ok");
+    sleep(1000);*/
+//}
 /*
 int main(){
     struct user User; //= {"testuser2","testpwd2"}; // = {"BenjaminP", "BenjaminPwD"};
