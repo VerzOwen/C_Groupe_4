@@ -41,7 +41,7 @@ unsigned checkLogin(struct user newUser){
 
     int correct;
 
-    if((strlen(newUser.login) < 21) && strlen(newUser.login) > 7){
+    if((strlen(newUser.login) < 20) && strlen(newUser.login) > 7){
         correct = 1;
     } else correct = 0;
 
@@ -52,10 +52,22 @@ unsigned checkLogin(struct user newUser){
 
 unsigned checkPwd(struct user newUser){
     
-    int correct;
-
+    int correctNb=0,correctMaj=0,correct,i;
+    
     if((strlen(newUser.passWord) < 21) && strlen(newUser.passWord) > 7){
-        correct = 1;
+        for(i=0;i<strlen(newUser.passWord);i++){
+            if(isdigit(newUser.passWord[i])){
+                correctNb = 1;
+            }
+            if(isupper(newUser.passWord[i])){
+                correctMaj=1;
+            }
+            if(correctNb==1 && correctMaj==1){
+                correct=1;
+                i=strlen(newUser.passWord);
+            }
+        }
+        
     } else correct = 0;
 
     return correct;
@@ -153,8 +165,6 @@ unsigned modifyUser(struct user User, struct user modifUser){
 
     fclose(users);
     fclose(modifFile);
-    printf("%d", modif);
-    printf("moddddddddddddddddddddddddddddddddd");
     remove("users.txt");
     rename("delete.txt","users.txt");
 
@@ -227,132 +237,14 @@ char *decrypt(char *passWord)
 
     return(passWord);
 }
+
 /*
 int main(){
-    int checkpwd,add, modif;
-*/
-   /* printf("Entrer un login : ");
-    scanf("%s", &User.login);
-    printf("Entrer un mot de passe modif : ");
-    scanf("%s", &User.passWord);*/
-
-
-  //  struct user User = {"testuser1", "testuser1"};
-    //struct user modifUser = {"testuser15", "testpwd15"};
-//add=addUser(User);
-   // modif=modifyUser(User, modifUser);
-
-    //if(modif==1){
-      //  printf("modifier");
-    //}   else printf("pas modif");
-    
-//sleep(1000);
-//}
-    /*checkpwd=checkCorrectPassWord(User);
-
-    if(checkpwd==1){
-        printf("mdp ok");
-    }   else printf("mdp no ok");
-    sleep(1000);*/
-//}
-/*
-int main(){
-    struct user User; //= {"testuser2","testpwd2"}; // = {"BenjaminP", "BenjaminPwD"};
     struct user newUser;
-    struct user modifUser;
-    int i, connexion;
-    int ajoutUser;
-    char erreur;
-    int exist;
-    int modif;
-    int delete;
-
-    printf("Entrer un login : ");
-    scanf("%s", &User.login);
-    printf("Entrer un mot de passe modif : ");
-    scanf("%s", &User.passWord);
-
-    strcpy(User.passWord, encrypt(User.passWord));
-
-    ajoutUser=addUser(User);
-    printf("%s", User.passWord);
-    decrypt(User.passWord);
-    printf("%s", User.passWord);*/
-
-    /*modif = checkCorrectPassWord(User);
-
-    if (modif==1){
-        printf("Mot de passe correct");
-    }   else printf("Mot de passe incorrect");*/
+    int add;
+        printf("Entrer login : ");  scanf("%s", &newUser.login); 
+        printf("Entrer mot de passe : ");   scanf("%s", &newUser.passWord);
+        add=addUser(newUser);
     
-    /*printf("Entrer le nouveau login : ");
-    scanf("%s", &modifUser.login);
-    printf("Entrer le nouveau mot de passe modif : ");
-    
-    scanf("%s", &modifUser.passWord);
 
-
-    // Test modif
-    modif=modifyUser(User, modifUser);
-
-    if(modif==1){
-        printf("Modification effectuee");
-    }   else printf("Echec de la modification");
-    
-    *//*
-    sleep(1000);
 }*/
-
-
-/*main{
-
-  Struct
-  Appel checkLogin
-  Appel checkPassWord
-
-  Si c'est bon : Appel checkExistPlayer
-
-  Si joueur n'éxiste pas : Appel addUser
-
-}
-*/
-
-/*for(i = 0 ; (User.passWord[i] = getch()) != '\r'; i++){
-        printf("*");
-    }*/
-    // Test Connexion
-    /*connexion=identification(newUser);
-
-    printf("%d", connexion);
-
-    if(connexion==2){
-        printf("connexion réussie"); 
-    } else if(connexion==0){
-        printf("Login incorrect");
-    } else if(connexion==1){
-        printf("Mot de passe incorrect");
-    }
-
-    printf("\n%d", connexion);*/
-    /*if(connexion=identification(User)){
-        printf("Connexion réussie");
-    } else printf("Connexion échouée");*/
-
-
-
-    // Test ajout
-    /*if((checkLogin(newUser))==1){
-        printf("test1");
-        if((checkPwd(newUser))==1){
-            printf("test2");
-            exist = checkExistUser(newUser);
-            if(exist==0){
-                ajoutUser=addUser(newUser);
-                printf("Utilisateur cree");
-            } else printf("Utilisateur existant");
-        } else printf("Le mot de passe doit faire minimum 8 caractères et maximum 20");
-    } else printf("Le login doit faire entre 8 et 20 caracteres");*/
-   
-    //ajoutUser=addUser(newUser);
-    //printf("ajout effectue");
-    //printf("%d", exist);
