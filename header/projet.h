@@ -6,8 +6,13 @@
 #include <unistd.h>
 #include <conio.h>
 #include <ctype.h>
-#include "../header/users.h"
-#include "../header/json.h"
+#include "SQL/mysql.h"
+#include <locale.h>
+#include <stdbool.h>
+#include"marques.h"
+#include "users.h"
+#include "json.h"
+#include "marques.h"
 /*#include "../unity/unity.c"
 #include "../unity/unity_internals.h"*/
 #include "../unity/unity.h"

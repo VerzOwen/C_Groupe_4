@@ -1,12 +1,7 @@
 #ifndef USERS_H_INCLUDED
 #define USERS_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <conio.h>
-#include <ctype.h>
+#include "projet.h"
 
 struct user{
     char login[20];

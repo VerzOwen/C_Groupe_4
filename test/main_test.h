@@ -2,8 +2,7 @@
 #define MAIN_TEST_H_INCLUDED
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "../header/projet.h"
 #include "../unity/unity.h"
 
 void testUsers();

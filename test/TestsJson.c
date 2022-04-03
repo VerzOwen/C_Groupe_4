@@ -1,4 +1,4 @@
-#include "../src/projet.h"
+#include "../header/projet.h"
 
 #define DIM 100
 
