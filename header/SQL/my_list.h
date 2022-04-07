@@ -31,6 +31,7 @@
  /**
    @file include/my_list.h
  */
+  #endif
   
  typedef struct LIST {
  #if defined(__cplusplus) && __cplusplus >= 201103L
@@ -53,4 +54,6 @@
  extern int list_walk(LIST *, list_walk_action action, unsigned char *argument);
   
  #define list_rest(a) ((a)->next)
+  
+
   

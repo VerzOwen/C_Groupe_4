@@ -10,6 +10,9 @@ void setUp(void)
     strcpy(erreur, "");
 }
 
+void test_insererDonnee(){
+
+}
 
 int main()
 {

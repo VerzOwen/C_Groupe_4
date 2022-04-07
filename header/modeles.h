@@ -6,6 +6,6 @@ void initialiserConnexion();
 void cloturerConnexion();
 void creerTables();
 void remplirTables();
-//void executerSQL(char *instructionSQL);
-//int insererDonnee(char *instructionSQL)
+void executerSQL(char *instructionSQL);
+int insererDonnee(char *instructionSQL)
 #endif 
