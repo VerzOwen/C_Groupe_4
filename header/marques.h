@@ -4,8 +4,8 @@
 int mainMarques();
 void initialiserConnexion();
 void cloturerConnexion();
-void creerTables();
-void remplirTables();
+int creerTables();
+int remplirTables();
 //void executerSQL(char *instructionSQL);
-//int insererDonnee(char *instructionSQL)
+//int insererDonnee(char *instructionSQL);
 #endif 

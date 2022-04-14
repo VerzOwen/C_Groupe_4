@@ -10,10 +10,19 @@ void setUp(void)
     strcpy(erreur, "");
 }
 
+void test_creerTable(){
+    TEST_ASSERT_EQUAL_INT(1, creerTables());
+}
+
+void test_remplirTable(){
+    TEST_ASSERT_EQUAL_INT( 1, remplirTables());
+}
 
 int main()
 {
     UNITY_BEGIN();
+    RUN_TEST(test_creerTable);
+    RUN_TEST(test_remplirTable);
     UNITY_END();
     return 0;
 }

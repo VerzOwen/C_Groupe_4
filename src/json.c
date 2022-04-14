@@ -1,19 +1,15 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <locale.h>
-#include <string.h>
-#include <stdbool.h>
-
+#include "../header/projet.h"
+#define DIM 100
 short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat, unsigned dim,char
 *messageErreur){
 
-    FILE *chaineJson = fopen("marques_modeles.txt");
+    FILE *chaineJson = fopen("marques_modeles.txt","r+");
 
     if (*nomAttribut == *resultat)
     {
         return 1;
     }
-    while (((*nomAttribut = fgetc(marques_modeles)) != EOF) && (*nomAttribut != resultat) && ((*nomAttribut == ' ') || (*nomAttribut == '\t') || (*nomAttribut == '\n')))
+    while (((*nomAttribut = fgetc(chaineJson)) != EOF) && (*nomAttribut != resultat) && ((*nomAttribut == ' ') || (*nomAttribut == '\t') || (*nomAttribut == '\n')))
     {
     }
     if (*nomAttribut != resultat)
@@ -28,7 +24,7 @@ short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat
     char *buffer = (char *)malloc(100);
     int positionDansBuffer = 0;
 
-    while (((*nomAttribut = fgetc(marques_modeles)) != EOF) && (*nomAttribut != '\"'))
+    while (((*nomAttribut = fgetc(chaineJson)) != EOF) && (*nomAttribut != '\"'))
     {
         buffer[positionDansBuffer] = (char)*nomAttribut;
         positionDansBuffer++;
@@ -39,7 +35,7 @@ short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat
         free(buffer);
         printf("Erreur: fermant de chaine '\"' non trouv�");
     }
-    *nomAttribut = fgetc(marques_modeles);
+    *nomAttribut = fgetc(chaineJson);
     buffer[positionDansBuffer] = '\0';
     positionDansBuffer++;
     char *chaine = (char *)malloc(positionDansBuffer);
