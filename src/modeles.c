@@ -90,12 +90,16 @@ void creerTable(){
   executerSQL("CREATE TABLE modele(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, NiceName VARCHAR(20) NOT NULL, MakeId INT(11) NOT NULL, PRIMARY KEY(Id))");
 }
 
+
+
 struct modeles{
   int Id;
   char Name[20];
   char NiceName[20];
   int MakeId;
 };
+
+
 
 void remplirTable(){
 
