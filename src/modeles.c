@@ -1,4 +1,5 @@
 #include "../header/projet.h"
+#define DIM 50
 
 MYSQL *sqlConnection = NULL;
 

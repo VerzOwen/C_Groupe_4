@@ -1,5 +1,5 @@
 #include "../header/projet.h"
-#define DIM 20
+#define DIM 50
 
 MYSQL *sqlConnection = NULL;
 
@@ -141,4 +141,30 @@ int remplirTable(){
 
     return retour;
     
+}
+
+void listMarques(char * listMarques){
+
+  char listJson[DIM],list[DIM];
+  int i;
+  unsigned *nbElements;
+  FILE *marques=NULL;
+
+  struct marques marq;
+  listJson=jsonArray(char &marques, char *marq.nom, char resultats[][DIM], unsigned *nbElements, char erreur);
+  
+    for(i=0;i<nbElements;i++){
+      list[i]=listJson[i][0];
+    }
+  
+    for (i=0;i < nbElements;i++){
+          listMarques[i]=list[i];
+      }
+    for (i=0;i < nbElements-1;i++){
+          if (list[i]>list[i+1]){
+                  listMarques[i]=list[i+1];
+                  listMarques[i+1]=list[i];
+              }
+      }
+
 }
