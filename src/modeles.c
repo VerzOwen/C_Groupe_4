@@ -118,3 +118,42 @@ void remplirTable(){
     }
     
 }
+
+
+
+void listModeles(char * listModeles, char niceName){
+
+  char listJson[DIM],list[DIM];
+  int i;
+  unsigned *nbElements;
+  FILE *modeles=NULL;
+
+  struct modeles mod;
+  listJson=jsonArray(char &modeles, char *mod.nom, char niceName, char resultats[][DIM], unsigned *nbElements, char erreur);
+  
+  for(i=0;i<nbElements;i++){
+      if(niceName == mod.NiceName){
+
+          list[i]=listJson[i][3];
+
+      i=nbElements+1;
+      }
+  }
+
+  for (i=0;i < nbElements;i++){
+
+    listMarques[i]=list[i];
+
+  }
+
+  for (i=0;i < nbElements-1;i++){
+
+    if (list[i]>list[i+1]){
+
+      listModeles[i]=list[i+1];
+      listModeles[i+1]=list[i];
+
+    }
+  }
+
+}
