@@ -3,7 +3,7 @@
 short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat, unsigned dim,char
 *messageErreur){
 
-    FILE *chaineJson = fopen("marques_modeles.txt","r+");
+    //FILE *chaineJson = fopen("marques_modeles.txt","r+");
 
     if (*nomAttribut == *resultat)
     {
@@ -19,7 +19,7 @@ short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat
 
      if (*nomAttribut != '\"')
     {
-        printf("Erreur: ouvrant de chaine '\"' non trouv�");
+        printf("Erreur: ouvrant de chaine '\"' non trouve");
     }
     char *buffer = (char *)malloc(100);
     int positionDansBuffer = 0;
@@ -33,7 +33,7 @@ short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat
     if (*nomAttribut != '\"')
     {
         free(buffer);
-        printf("Erreur: fermant de chaine '\"' non trouv�");
+        printf("Erreur: fermant de chaine '\"' non trouve");
     }
     *nomAttribut = fgetc(chaineJson);
     buffer[positionDansBuffer] = '\0';
@@ -53,3 +53,4 @@ short unsigned jsonArray(char *chaineJson, char *nomAttribut, char resultats[][D
 *nbElements, char *messageErreur){
 
 }
+
