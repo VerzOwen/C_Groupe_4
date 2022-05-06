@@ -1,9 +1,6 @@
 {
     "files.associations": {
-        "stdio.h": "c",
-        "stdbool.h": "c",
-        "mysql.h": "c",
-        "projet.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
+        "users.h": "c",
+        "unity.h": "c"
+    }
 }

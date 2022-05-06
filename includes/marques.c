@@ -1,12 +1,16 @@
-#include "../header/projet.h"
+#include "projet.h"
 #define DIM 50
+
 MYSQL *sqlConnection = NULL;
 
-int mainVersions(){
+int mainMarques(){
     
     // Creer les tables de la DB et les remplir avec le fichier
+    char erreur;
     creerTables();
-    remplirTables();
+    if(remplirTables()==0){
+      printf(erreur);
+    }
     
     return(0);
 }
@@ -36,6 +40,9 @@ void cloturerConnexion()
     mysql_close(sqlConnection);
   }
 }
+
+
+
 
 void executerSQL(char *instructionSQL)
 {
@@ -82,7 +89,7 @@ int creerTable(){
   executerSQL("DROP DATABASE IF EXISTS marques");
   executerSQL("CREATE DATABASE marques CHARACTER SET = 'utf8' COLLATE = 'utf8_general_cs'");
   executerSQL("USE marques");
-  char createTable="executerSQL(CREATE TABLE marques(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, Powers VARCHAR(20) NOT NULL, ModelNiceName VARCHAR(20) NOT NULL, PRIMARY KEY(Id)))";
+  char createTable="executerSQL(CREATE TABLE marques(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, NiceName VARCHAR(20) NOT NULL, PRIMARY KEY(Id)))";
 
   if (mysql_query(sqlConnection, createTable)){
     create=0; //La table n'a pas été créée
@@ -93,51 +100,71 @@ int creerTable(){
   return create;
 }
 
-struct versions{
+struct marques{
   int Id;
   char Name[20];
-  char Powers[20];
-  char ModelNiceName[20];
+  char NiceName[20];
 };
 
 int remplirTable(){
 
   char *inserer = (char *)malloc(1024);
   int id;
-  char name, modelNiceName,result,erreur,retour=1;
+  char name, niceName,result,erreur,retour=1;
 
-  FILE *versions=NULL;
+  FILE *marques=NULL;
 
-  struct versions vers;
+  struct marques marq;
 
-    while(!feof(versions)){
+    while(!feof(marques)){
         
-        fread(&vers, sizeof(struct user), 1, versions);
-        if(jsonPrimitive(&vers,vers.Id,result,DIM,erreur)){
+        fread(&marq, sizeof(struct marques), 1, marques);
+        if(jsonPrimitive(&marq,marq.Id,result,DIM,erreur)){
           id=result;
         } else{
           retour=0;
         }
-        if(jsonPrimitive(&vers,vers.Name,result,DIM,erreur)){
+        if(jsonPrimitive(&marq,marq.Name,result,DIM,erreur)){
           name=result;
         }
         else{
           retour=0;
         }
-       if(jsonPrimitive(&vers,vers.Powers,result,DIM,erreur)){
-         powers=result;
+       if(jsonPrimitive(&marq,marq.NiceName,result,DIM,erreur)){
+         niceName=result;
        } else{
           retour=0;
         }
-        if(jsonPrimitive(&vers,vers.ModelNiceName,result,DIM,erreur)){
-         modelNiceName=result;
-       } else{
-          retour=0;
-        }
-        sprintf(inserer, "INSERT INTO personne (Id, Name, Powers, ModelNiceName) VALUES (id, name, powers, modelNiceName)");
+        sprintf(inserer, "INSERT INTO personne (Id, Name, NiceName) VALUES (id, name, niceName)");
 
     }
 
     return retour;
     
+}
+
+void listMarques(char * listMarques){
+
+  char listJson,list[DIM], resultats[DIM][DIM], erreur[DIM];
+  int i;
+  unsigned *nbElements;
+  FILE *marques=NULL;
+
+  struct marques marq;
+  listJson=jsonArray( &marques, *marq.Name, resultats, *nbElements, erreur);
+  
+    for(i=0;i<nbElements;i++){
+      list[i]=listJson;
+    }
+  
+    for (i=0;i < nbElements;i++){
+          listMarques[i]=list[i];
+      }
+    for (i=0;i < nbElements-1;i++){
+          if (list[i]>list[i+1]){
+                  listMarques[i]=list[i+1];
+                  listMarques[i+1]=list[i];
+              }
+      }
+
 }

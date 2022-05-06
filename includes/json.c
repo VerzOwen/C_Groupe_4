@@ -1,10 +1,12 @@
-#include "../header/projet.h"
+/*#include "projet.h"
+
 #define DIM 100
+
 short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat, unsigned dim,char
 *messageErreur){
 
     //FILE *chaineJson = fopen("marques_modeles.txt","r+");
-
+    int OK;
     if (*nomAttribut == *resultat)
     {
         return 1;
@@ -41,7 +43,7 @@ short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat
     char *chaine = (char *)malloc(positionDansBuffer);
     strcpy(chaine, buffer);
     free(buffer);
-        bool OK = !strcmp(buffer, "CarList");
+        OK = !strcmp(buffer, "CarList");
         free(buffer);
         if (!OK)
         {
@@ -54,3 +56,4 @@ short unsigned jsonArray(char *chaineJson, char *nomAttribut, char resultats[][D
 
 }
 
+*/

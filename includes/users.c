@@ -1,4 +1,4 @@
-#include "../header/projet.h"
+#include "users.h"
 
 /*unsigned connexion(struct user connectUser){
 
@@ -237,3 +237,14 @@ char *decrypt(char *passWord)
 
     return(passWord);
 }
+
+/*
+int main(){
+    struct user newUser;
+    int add;
+        printf("Entrer login : ");  scanf("%s", &newUser.login); 
+        printf("Entrer mot de passe : ");   scanf("%s", &newUser.passWord);
+        add=addUser(newUser);
+    
+
+}*/

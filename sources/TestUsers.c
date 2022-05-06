@@ -1,7 +1,5 @@
-#include "../header/projet.h"
-#include "../unity/unity.c"
-#include "../src/users.c"
-
+#include "../unity/unity.h"
+#include "../includes/users.h"
 
 // Test connexion
 /*void test_connexionUserInconnu(){
