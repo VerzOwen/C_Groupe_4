@@ -104,7 +104,7 @@ void test_deleteUserInCorrect(){
 
 
 
-int main()
+int testUsers()
 {
     struct user admin= {"adminlog", "Adminpwd0"};
     struct user User1 = {"testuser1", "Testpwd1"};

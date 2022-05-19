@@ -31,11 +31,11 @@
       "args": [
         "-fdiagnostics-color=always",
         "-g",
-        "TestUsers.c",
+        "main_test.c",
         "..\\unity\\*.c",
         "..\\includes\\*.c",
         "-o",
-        "${workspaceFolder}\\test_user.exe"
+        "${workspaceFolder}\\main_test.exe"
       ],
       "options": {
         "cwd": "${fileDirname}"
@@ -45,27 +45,47 @@
       ],
       "group": "build"
     },
-		{
-			"type": "process",
-			"label": "Executer le projet",
-			"command": "main.exe",
-			"args": [],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": "test",
-			"problemMatcher": []
-		},
-		{
-			"type": "process",
-			"label": "Executer les tests",
-			"command": "test_users.exe",
-			"args": [],
-			"options": {
-				"cwd": "${workspaceFolder}"
-			},
-			"group": "test",
-			"problemMatcher": []
-		}
+    {
+      "type": "process",
+      "label": "Executer le projet",
+      "command": "main.exe",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "type": "process",
+      "label": "Executer les tests",
+      "command": "main_test.exe",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "type": "cppbuild",
+      "label": "C/C++: gcc.exe générer le fichier actif",
+      "command": "C:\\msys64\\mingw64\\bin\\gcc.exe",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}\\${fileBasenameNoExtension}.exe"
+      ],
+      "options": {
+        "cwd": "C:\\msys64\\mingw64\\bin"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "detail": "compilateur : C:\\msys64\\mingw64\\bin\\gcc.exe"
+    }
   ]
 }

@@ -6,5 +6,6 @@
 #include <unistd.h>
 #include <conio.h>
 #include <ctype.h>
-#include "SQL/mysql.h"
+#include "../unity/unity.h"
+#include <mysql.h>
 #endif 

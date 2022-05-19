@@ -1,59 +1,129 @@
-/*#include "projet.h"
+#include "projet.h"
 
-#define DIM 100
+#define DIM 5
+#define DIMERROR 50
 
 short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat, unsigned dim,char
 *messageErreur){
 
     //FILE *chaineJson = fopen("marques_modeles.txt","r+");
-    int OK;
-    if (*nomAttribut == *resultat)
-    {
-        return 1;
+    int trouve=1, caractereCourant=0;
+    char messageErreurCarAttendu[DIMERROR];
+    char messageErreurLectureChaine[DIMERROR];
+    char chaineLue,nomAttri;
+    //Cherche l'attribut dont le nom est entré en paramètre
+    while(strcmp(nomAttri,nomAttribut)!=0){
+        lireJusqueCaractereAttendu(chaineJson,&caractereCourant,'\"',messageErreurCarAttendu);
+         lectureChaine(chaineJson, caractereCourant,nomAttri,messageErreurLectureChaine);
+        lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
     }
-    while (((*nomAttribut = fgetc(chaineJson)) != EOF) && (*nomAttribut != resultat) && ((*nomAttribut == ' ') || (*nomAttribut == '\t') || (*nomAttribut == '\n')))
-    {
-    }
-    if (*nomAttribut != resultat)
-    {
-        return 0;
-    }
-
-     if (*nomAttribut != '\"')
-    {
-        printf("Erreur: ouvrant de chaine '\"' non trouve");
-    }
-    char *buffer = (char *)malloc(100);
-    int positionDansBuffer = 0;
-
-    while (((*nomAttribut = fgetc(chaineJson)) != EOF) && (*nomAttribut != '\"'))
-    {
-        buffer[positionDansBuffer] = (char)*nomAttribut;
-        positionDansBuffer++;
-    }
-    // V�rifier qu'on est bien sur le " fermant
-    if (*nomAttribut != '\"')
-    {
-        free(buffer);
-        printf("Erreur: fermant de chaine '\"' non trouve");
-    }
-    *nomAttribut = fgetc(chaineJson);
-    buffer[positionDansBuffer] = '\0';
-    positionDansBuffer++;
-    char *chaine = (char *)malloc(positionDansBuffer);
-    strcpy(chaine, buffer);
-    free(buffer);
-        OK = !strcmp(buffer, "CarList");
-        free(buffer);
-        if (!OK)
-        {
-            return 0;
+    if(messageErreurCarAttendu[0]!=NULL){
+        strcpy(messageErreur,messageErreurCarAttendu);
+        trouve=0;
+    } else {
+        lectureChaine(chaineJson,caractereCourant,chaineLue,messageErreurLectureChaine);
+        if(messageErreurLectureChaine[0]!=NULL){
+            strcpy(messageErreur,messageErreurLectureChaine);
+            trouve=0;
+        } else {
+            strcpy(resultat,chaineLue);
         }
+    }
+
+    return trouve;
 }
 
 short unsigned jsonArray(char *chaineJson, char *nomAttribut, char resultats[][DIM], unsigned
 *nbElements, char *messageErreur){
 
+    int i,j=0, continuer=1, trouve=1, caractereCourant=0;
+    char messageErreurCarAttendu[DIMERROR];
+    char messageErreurLectureChaine[DIMERROR];
+    char chaineLue,nomAttri; 
+
+     while(strcmp(nomAttri,nomAttribut)!=0){
+        lireJusqueCaractereAttendu(chaineJson,&caractereCourant,'\"',messageErreurCarAttendu);
+        lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
+        lectureChaine(chaineJson, caractereCourant,nomAttri,messageErreurLectureChaine);
+    }
+    lireJusqueCaractereAttendu(chaineJson,&caractereCourant,'[',messageErreurCarAttendu);
+    lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
+    while(continuer==1){
+        for(i=0;i<DIM;i++){
+            lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
+            if(messageErreurCarAttendu[0]!=NULL){
+                strcpy(messageErreur,messageErreurCarAttendu);
+                trouve=0;
+            } else {
+                lectureChaine(chaineJson,caractereCourant,chaineLue,messageErreurLectureChaine);
+                if(messageErreurLectureChaine[0]!=NULL){
+                    strcpy(messageErreur,messageErreurLectureChaine);
+                    trouve=0;
+                } else {
+                    strcpy(resultats[j][i],chaineLue);
+                }
+        }
+        }
+        //Parcour le fichier pour controler si d'autre lignes doivent être rajoutées
+        while(((caractereCourant = fgetc(chaineJson)) != EOF) && (caractereCourant != "{") && (caractereCourant != "]")){
+        }
+        if(caractereCourant=="]"){
+            continuer=0;
+        }
+        j+=1;
+    }
+
+    nbElements=j;
+    return trouve;
 }
 
-*/
+
+void lireJusqueCaractereAttendu(char *chaineJson, int *caractereCourant, int caractereAttendu,char *MessageErreur)
+{
+    if (*caractereCourant == caractereAttendu)
+    {
+        return;
+    }
+    while (((*caractereCourant = fgetc(chaineJson)) != EOF) && (*caractereCourant != caractereAttendu) && ((*caractereCourant == ' ') || (*caractereCourant == '\t') || (*caractereCourant == '\n')))
+    {
+    }
+    if (*caractereCourant != caractereAttendu)
+    {
+        
+        strcpy(MessageErreur,"Erreur: caractere attendu non trouve");
+    }
+}
+
+char *lectureChaine(char *chaineJson, int *caractereCourant,char *chaineLue,char *messageErreur)
+{
+    char *buffer;
+    // Verifier qu'on est bien sur le " ouvrant
+    if (*caractereCourant != '\"')
+    {
+        strcpy(messageErreur,"Erreur: ouvrant de chaine non trouver");
+        
+    }
+    buffer = (char *)malloc(100);
+    int positionDansBuffer = 0;
+    // Lire les caracteres et les mettre dans la zone de travail jusqu'au " fermant
+    while (((*caractereCourant = fgetc(chaineJson)) != EOF) && (*caractereCourant != '\"'))
+    {
+        buffer[positionDansBuffer] = (char)*caractereCourant;
+        positionDansBuffer++;
+    }
+    // Verification qu'on est bien sur le " fermant
+    if (*caractereCourant != '\"')
+    {
+        free(buffer);
+        strcpy(messageErreur,"Erreur: fermant de chaine non trouver");
+    }
+    // Passe au caractere suivant et terminer le buffer avec un 0
+    *caractereCourant = fgetc(chaineJson);
+    buffer[positionDansBuffer] = '\0';
+    positionDansBuffer++;
+    // Allouer une zone de memoire et y copier la chaine
+    char *chaine = (char *)malloc(positionDansBuffer);
+    strcpy(chaine, buffer);
+    free(buffer);
+    chaineLue=chaine;
+}
