@@ -1,16 +1,12 @@
 #include "projet.h"
 #define DIM 50
-
 MYSQL *sqlConnection = NULL;
 
-int mainMarques(){
+int mainVersions(){
     
     // Creer les tables de la DB et les remplir avec le fichier
-    char erreur;
     creerTables();
-    if(remplirTables()==0){
-      printf(erreur);
-    }
+    remplirTables();
     
     return(0);
 }
@@ -40,9 +36,6 @@ void cloturerConnexion()
     mysql_close(sqlConnection);
   }
 }
-
-
-
 
 void executerSQL(char *instructionSQL)
 {
@@ -89,7 +82,7 @@ int creerTable(){
   executerSQL("DROP DATABASE IF EXISTS marques");
   executerSQL("CREATE DATABASE marques CHARACTER SET = 'utf8' COLLATE = 'utf8_general_cs'");
   executerSQL("USE marques");
-  char createTable="executerSQL(CREATE TABLE marques(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, NiceName VARCHAR(20) NOT NULL, PRIMARY KEY(Id)))";
+  char createTable="executerSQL(CREATE TABLE marques(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, Powers VARCHAR(20) NOT NULL, ModelNiceName VARCHAR(20) NOT NULL, PRIMARY KEY(Id)))";
 
   if (mysql_query(sqlConnection, createTable)){
     create=0; //La table n'a pas été créée
@@ -100,42 +93,48 @@ int creerTable(){
   return create;
 }
 
-struct marques{
+struct versions{
   int Id;
   char Name[20];
-  char NiceName[20];
+  char Powers[20];
+  char ModelNiceName[20];
 };
 
 int remplirTable(){
 
   char *inserer = (char *)malloc(1024);
   int id;
-  char name, niceName,result,erreur,retour=1;
+  char name, modelNiceName,result,Powers,erreur,retour=1;
 
-  FILE *marques=NULL;
+  FILE *versions=NULL;
 
-  struct marques marq;
+  struct versions vers;
 
-    while(!feof(marques)){
+    while(!feof(versions)){
         
-        fread(&marq, sizeof(struct marques), 1, marques);
-        if(jsonPrimitive(&marq,marq.Id,result,DIM,erreur)){
+        fread(&vers, sizeof(struct versions), 1, versions);
+        if(jsonPrimitive(&vers,vers.Id,result,DIM,erreur)){
           id=result;
         } else{
           retour=0;
         }
-        if(jsonPrimitive(&marq,marq.Name,result,DIM,erreur)){
+        if(jsonPrimitive(&vers,vers.Name,result,DIM,erreur)){
           name=result;
         }
         else{
           retour=0;
         }
-       if(jsonPrimitive(&marq,marq.NiceName,result,DIM,erreur)){
-         niceName=result;
+       if(jsonPrimitive(&vers,vers.Powers,result,DIM,erreur)){
+         Powers=result;
        } else{
           retour=0;
         }
-        sprintf(inserer, "INSERT INTO personne (Id, Name, NiceName) VALUES (id, name, niceName)");
+        if(jsonPrimitive(&vers,vers.ModelNiceName,result,DIM,erreur)){
+         modelNiceName=result;
+       } else{
+          retour=0;
+        }
+        sprintf(inserer, "INSERT INTO personne (Id, Name, Powers, ModelNiceName) VALUES (id, name, powers, modelNiceName)");
 
     }
 
@@ -143,32 +142,30 @@ int remplirTable(){
     
 }
 
-void listMarques(char * listMarques){
 
-  char list[DIM], resultats[DIM][DIM], erreur[DIM];
-  int i;
+void listVersions(char ** listVersions, char niceName){
+
+  char list[DIM][2],resultats[DIM][DIM],erreur[DIM];
+  int i,j;
   unsigned *nbElements;
-  FILE *marques=NULL;
-  marques=fopen("marques_modeles.txt","r+");
-  struct marques marq;
-  
-    for(i=0;i<nbElements;i++){
-      
-      if(jsonArray( &marques, *marq.Name, resultats, *nbElements, erreur)){
-        list[i]=resultats;
-      } else{
-        exit(EXIT_FAILURE);
+  FILE *versions=NULL;
+  struct versions vers;
+
+  if(jsonArray(&versions, *vers.Name, niceName, resultats, *nbElements, erreur)){
+    for(i=0;i<DIM;i++){
+        if(niceName == vers.ModelNiceName){
+            list[i][0]=resultats[i][1]; //garnit la liste avec le nom de la version
+            list[i][1]=resultats[i][7]; //garnit la liste avec la puissance de la version
+        }
+     }
+
+    for (i=0;i < nbElements-1;i++){
+      if (list[i]>list[i+1]){
+        listVersions[i][0]=list[i+1][0];
+        listVersions[i][1]=list[i+1][1];
+        listVersions[i+1][0]=list[i][0];
+        listVersions[i+1][1]=list[i][1];
       }
     }
-  
-    for (i=0;i < nbElements;i++){
-          listMarques[i]=list[i];
-      }
-    for (i=0;i < nbElements-1;i++){
-          if (list[i]>list[i+1]){
-                  listMarques[i]=list[i+1];
-                  listMarques[i+1]=list[i];
-              }
-      }
-
+  }
 }
