@@ -109,8 +109,8 @@ struct marques{
 int remplirTable(){
 
   char *inserer = (char *)malloc(1024);
-  int id;
-  char name, niceName,result,erreur,retour=1;
+  int id,retour=1;
+  char name, niceName,result,erreur;
 
   FILE *marques=NULL;
 
@@ -135,7 +135,7 @@ int remplirTable(){
        } else{
           retour=0;
         }
-        sprintf(inserer, "INSERT INTO personne (Id, Name, NiceName) VALUES (id, name, niceName)");
+        sprintf(inserer, "INSERT INTO MARQUES (Id, Name, NiceName) VALUES (id, name, niceName)");
 
     }
 
@@ -143,32 +143,17 @@ int remplirTable(){
     
 }
 
-void listMarques(char * listMarques){
-
-  char list[DIM], resultats[DIM][DIM], erreur[DIM];
-  int i;
-  unsigned *nbElements;
-  FILE *marques=NULL;
-  marques=fopen("marques_modeles.txt","r+");
-  struct marques marq;
-  
-    for(i=0;i<nbElements;i++){
-      
-      if(jsonArray( &marques, *marq.Name, resultats, *nbElements, erreur)){
-        list[i]=resultats;
-      } else{
-        exit(EXIT_FAILURE);
-      }
+void listMarques(char * listMarques, int nbElements){
+     // tri de la table
+    int i=0;
+    
+    MYSQL_RES *sqlResult = SqlSelect("SELECT * FROM MARQUES ORDER BY NAME ASC");
+    MYSQL_ROW sqlRow;
+    while(sqlRow= mysql_fetch_row(sqlResult)){
+      //Lecture ligne par ligne et remplissage de la liste
+      strcpy(listMarques[i],sqlRow[1]);//remplissage de la cellule par la champ de la DB qui contient le nom de la marque
+      i+=1;
     }
-  
-    for (i=0;i < nbElements;i++){
-          listMarques[i]=list[i];
-      }
-    for (i=0;i < nbElements-1;i++){
-          if (list[i]>list[i+1]){
-                  listMarques[i]=list[i+1];
-                  listMarques[i+1]=list[i];
-              }
-      }
-
+    nbElements=i;
+    
 }

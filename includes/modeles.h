@@ -7,5 +7,6 @@ void cloturerConnexion();
 void creerTables();
 void remplirTables();
 void executerSQL(char *instructionSQL);
-int insererDonnee(char *instructionSQL)
+int insererDonnee(char *instructionSQL);
+void listModeles(char * listModeles, char niceName, int nbElements, char * erreur);
 #endif 

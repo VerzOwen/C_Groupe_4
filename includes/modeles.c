@@ -92,28 +92,57 @@ void creerTable(){
 }
 
 
-
-struct modeles{
+struct marques{
   int Id;
   char Name[20];
   char NiceName[20];
-  int MakeId;
+  struct modeles{
+    int Id;
+    char Name[20];
+    char NiceName[20];
+    int MakeId;
 };
+};
+
 
 
 
 void remplirTable(){
 
-  char *inserer = (char *)malloc(1024);
+  int id, makeId, retour=1;
+  char *inserer = (char *)malloc(1024), result, erreur [DIM], name, niceName;
 
   FILE *modeles=NULL;
-
+  modeles=fopen("marques_modeles.txt","r+");
+  struct marques marq;
   struct modeles mod;
-
+  
     while(!feof(modeles)){
         
         fread(&mod, sizeof(struct modeles), 1, modeles);
-        sprintf(inserer, "INSERT INTO personne (Id, Name, NiceName, MakeId) VALUES (modeles.Id, modeles.Name, modeles.NiceName, modeles.MakeId)");
+        if(jsonPrimitive(&mod,mod.Id,result,DIM,erreur)){
+          id=result;
+        } else{
+          retour=0;
+        }
+        if(jsonPrimitive(&mod,mod.Name,result,DIM,erreur)){
+          name=result;
+        }
+        else{
+          retour=0;
+        }
+        if(jsonPrimitive(&mod,mod.NiceName,result,DIM,erreur)){
+         niceName=result;
+        } else{
+          retour=0;
+        }
+        if(jsonPrimitive(&marq,marq.Id,result,DIM,erreur)){
+          makeId=result;
+        } else {
+          retour=0;
+        }
+        sprintf(inserer, "INSERT INTO MODELES (Id, Name, NiceName, MakeId) VALUES (id, name, niceName, makeId)");
+        
 
     }
     
@@ -121,29 +150,18 @@ void remplirTable(){
 
 
 
-void listModeles(char * listModeles, char niceName){
-
-  char list[DIM],resultats[DIM][DIM],erreur[DIM];
-  int i,j;
-  unsigned *nbElements;
-  FILE *modeles=NULL;
-
-  struct modeles mod;
-  if(jsonArray(&modeles, *mod.Name, niceName, resultats, *nbElements, erreur)){
-      
-    for(i=0;i<DIM;i++){
-        if(niceName == mod.NiceName){
-            list[i]=resultats[i][1]; //garnit la liste avec le nom du modèle
-        }
-      }
-
-    for (i=0;i < nbElements-1;i++){
-      if (list[i]>list[i+1]){
-        listModeles[i]=list[i+1];
-        listModeles[i+1]=list[i];
-      }
-    }
-  }
+void listModeles(char * listModeles, char niceName, int nbElements, char * erreur){
   
+   // tri de la table
+    int i=0;
+    char list[DIM], resultats[DIM][DIM], erreur[DIM];
+    MYSQL_RES *sqlResult = SqlSelect("SELECT * FROM MODELES ORDER BY NAME ASC FOR JSON PATH, ROOT('Modeles')");
+
+    if(jsonArray(sqlResult,niceName, resultats, nbElements, erreur)){
+      for(i=0;i<nbElements;i++){
+        listModeles[i]=resultats[i][1]; //garnit la liste avec le nom du modèle
+      }
+    } 
+    
 
 }

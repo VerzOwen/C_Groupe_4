@@ -96,8 +96,10 @@ int creerTable(){
 struct versions{
   int Id;
   char Name[20];
-  char Powers[20];
   char ModelNiceName[20];
+  struct engine{
+    char Powers[20];
+  };
 };
 
 int remplirTable(){
@@ -109,7 +111,7 @@ int remplirTable(){
   FILE *versions=NULL;
 
   struct versions vers;
-
+  struct engine engine;
     while(!feof(versions)){
         
         fread(&vers, sizeof(struct versions), 1, versions);
@@ -124,7 +126,7 @@ int remplirTable(){
         else{
           retour=0;
         }
-       if(jsonPrimitive(&vers,vers.Powers,result,DIM,erreur)){
+       if(jsonPrimitive(&vers,engine.Powers,result,DIM,erreur)){
          Powers=result;
        } else{
           retour=0;
@@ -143,29 +145,17 @@ int remplirTable(){
 }
 
 
-void listVersions(char ** listVersions, char niceName){
+void listVersions(char ** listVersions, char niceName, int nbElements, char * erreur){
 
-  char list[DIM][2],resultats[DIM][DIM],erreur[DIM];
-  int i,j;
-  unsigned *nbElements;
-  FILE *versions=NULL;
-  struct versions vers;
-
-  if(jsonArray(&versions, *vers.Name, niceName, resultats, *nbElements, erreur)){
-    for(i=0;i<DIM;i++){
-        if(niceName == vers.ModelNiceName){
-            list[i][0]=resultats[i][1]; //garnit la liste avec le nom de la version
-            list[i][1]=resultats[i][7]; //garnit la liste avec la puissance de la version
-        }
-     }
-
-    for (i=0;i < nbElements-1;i++){
-      if (list[i]>list[i+1]){
-        listVersions[i][0]=list[i+1][0];
-        listVersions[i][1]=list[i+1][1];
-        listVersions[i+1][0]=list[i][0];
-        listVersions[i+1][1]=list[i][1];
-      }
+  int i=0;
+  char resultats[DIM][DIM], erreur[DIM];
+  MYSQL_RES *sqlResult = SqlSelect("SELECT * FROM VERSIONS ORDER BY NAME ASC FOR JSON PATH, ROOT('Version')");
+  
+  if(jsonArray(sqlResult,niceName, resultats, nbElements, erreur)){
+    for(i=0;i<nbElements;i++){
+      strcpy(listVersions[i][0],resultats[i][1]); //garnit la liste avec le nom de la version
+      strcpy(listVersions[i][1],resultats[i][2]);
     }
+
   }
 }
