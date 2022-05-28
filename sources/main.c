@@ -1,5 +1,10 @@
 #include "../includes/projet.h"
 #include "../includes/users.h"
+#include "../includes/json.h"
+#include "../includes/modeles.h"
+#include "../includes/marques.h"
+#include "../includes/versions.h"
+
 #define DIM 20
 int main(){
     //DECLARATION
@@ -11,7 +16,7 @@ int main(){
     int choix;
     int choixadmi, choixutili;
     int logcorr, pwdcorr, idcorr;
-    int i, add, connection, modif, delete;
+    int i, j, add, connection, modif, delete;
     char crypt[DIM],RepeatPassword[DIM];
     //DEFINITION
     debut: //Permet la réinitialisation des données lors d'une déconnexion
@@ -21,6 +26,10 @@ int main(){
     logcorr=0;
     pwdcorr=0;
     idcorr=0;
+    int nbElement=DIM;
+    char listVersions[DIM][DIM], listMarques[DIM][DIM], listModeles[DIM][DIM];
+    char niceName[DIM], erreur[DIM];
+
     while((choix != 1) || (choix !=2)){
 
         printf("\n\n1. Creer un compte \n2. Se connecter \n\nVotre choix : ");  scanf("%d", &choix);
@@ -197,11 +206,38 @@ int main(){
                     switch(choixutili){
                         case(1): //liste des marques
 
+
+
+                            listMarques(listMarques[]);
+
+                            for(i=0;i<DIM+1;i++){
+                                    printf("\n %s ", listMarques[i]);
+                            }
+
                         break;
                         case(2): //liste des modèles d'une marque
 
+                            printf("Entrer le nice name que vous rechercher : ");   scanf("%s", &niceName);
+
+                            listModeles(listModeles[], niceName, nbElement, erreur);
+
+                            for(i=0;i<DIM+1;i++){
+
+                                    printf("\n %s ", listModeles[i]);
+                            }
+
                         break;
                         case(3): //liste des versions
+
+                            printf("Entrer le nice name que vous rechercher : ");   scanf("%s", &niceName);
+
+                            listVersions(listVersions[][], niceName, nbElement, erreur);
+
+                            for(i=0;i<DIM+1;i++){
+                                for(j=0;j<DIM+1;j++){
+                                    printf("\n %s ", listVersions[i][j]);
+                                }
+                            }
 
                         break;
                         case(4): //deconnexion

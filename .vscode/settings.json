@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "users.h": "c",
-        "unity.h": "c",
-        "projet.h": "c",
-        "json.h": "c",
-        "main_test.h": "c"
-    }
-}
