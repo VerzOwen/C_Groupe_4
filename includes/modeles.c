@@ -6,8 +6,11 @@ MYSQL *sqlConnection = NULL;
 int mainModeles(){
     
     // Creer les tables de la DB et les remplir avec le fichier
+      char erreur;
     creerTables();
-    remplirTables();
+    if(remplirTables()==0){
+      printf(erreur);
+    }
     
     return(0);
 }
@@ -84,11 +87,20 @@ int insererDonnee(char *instructionSQL)
 
 
 
-void creerTable(){
+int creerTable(){
+  int create=1;
   executerSQL("DROP DATABASE IF EXISTS modeles");
   executerSQL("CREATE DATABASE modeles CHARACTER SET = 'utf8' COLLATE = 'utf8_general_cs'");
   executerSQL("USE modeles");
-  executerSQL("CREATE TABLE modele(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, NiceName VARCHAR(20) NOT NULL, MakeId INT(11) NOT NULL, PRIMARY KEY(Id))");
+  char createTable="executerSQL(CREATE TABLE modeles(Id INT(11) NOT NULL AUTO_INCREMENT, NAME VARCHAR(20) NOT NULL, NiceName VARCHAR(20) NOT NULL, MakeId INT(11) NOT NULL, PRIMARY KEY(Id)))";
+
+  if (mysql_query(sqlConnection, createTable)){
+    create=0; //La table n'a pas été créée
+    fprintf(stderr, "%s\n", mysql_error(sqlConnection));
+    mysql_close(sqlConnection);
+    exit(EXIT_FAILURE);
+  }
+  return create;
 }
 
 
@@ -107,7 +119,7 @@ struct marques{
 
 
 
-void remplirTable(){
+int remplirTable(){
 
   int id, makeId, retour=1;
   char *inserer = (char *)malloc(1024), result, erreur [DIM], name, niceName;
@@ -145,7 +157,7 @@ void remplirTable(){
         
 
     }
-    
+    return retour;
 }
 
 

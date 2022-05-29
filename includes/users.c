@@ -49,7 +49,6 @@ unsigned checkLogin(struct user newUser){
 }
 
 
-
 unsigned checkPwd(struct user newUser){
     
     int correctNb=0,correctMaj=0,correct,i;
@@ -127,7 +126,6 @@ unsigned checkCorrectPassWord(struct user User){
 }
 
 
-
 unsigned modifyUser(struct user User, struct user modifUser){
     
     int modif=0; 
@@ -203,7 +201,6 @@ unsigned deleteUser(struct user User){
 }
 
 
-
 char * encrypt(char *passWord)
 {
     int k;
@@ -219,7 +216,6 @@ char * encrypt(char *passWord)
     }
     return(passWord);
 }
-
 
 
 char *decrypt(char *passWord)

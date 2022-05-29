@@ -27,7 +27,7 @@ int main(){
     pwdcorr=0;
     idcorr=0;
     int nbElement=DIM;
-    char listVersions[DIM][DIM], listMarques[DIM][DIM], listModeles[DIM][DIM];
+    char listeVersions[DIM][DIM], listeMarques[DIM], listeModeles[DIM];
     char niceName[DIM], erreur[DIM];
 
     while((choix != 1) || (choix !=2)){
@@ -207,38 +207,38 @@ int main(){
                         case(1): //liste des marques
 
 
-
-                            listMarques(listMarques[]);
-
+                           
+                            listMarques(listeMarques[DIM], nbElement);
+                            printf("\nListe des marques de voitures : ");
                             for(i=0;i<DIM+1;i++){
-                                    printf("\n %s ", listMarques[i]);
+                                    printf("\n %s ", listeMarques[i]);
                             }
-
+                            printf("\nNombre de marques : %d",nbElement);
                         break;
                         case(2): //liste des modèles d'une marque
 
-                            printf("Entrer le nice name que vous rechercher : ");   scanf("%s", &niceName);
+                            printf("\nEntrer le nice name que vous rechercher : ");   scanf("%s", &niceName);
 
-                            listModeles(listModeles[], niceName, nbElement, erreur);
-
+                            listModeles(listeModeles[DIM], niceName, nbElement, erreur);
+                            printf("\nListe des modeles : ");
                             for(i=0;i<DIM+1;i++){
 
-                                    printf("\n %s ", listModeles[i]);
+                                    printf("\n %s ", listeModeles[i]);
                             }
-
+                            printf("\nNombre de modeles : %d",nbElement);
                         break;
                         case(3): //liste des versions
 
                             printf("Entrer le nice name que vous rechercher : ");   scanf("%s", &niceName);
 
-                            listVersions(listVersions[][], niceName, nbElement, erreur);
-
+                            listVersions(listeVersions[DIM][DIM], niceName, nbElement, erreur);
+                            printf("\nListe des versions : ");
                             for(i=0;i<DIM+1;i++){
                                 for(j=0;j<DIM+1;j++){
-                                    printf("\n %s ", listVersions[i][j]);
+                                    printf("\n %s ", listeVersions[i][j]);
                                 }
                             }
-
+                            printf("\nNombre de versions : %d",nbElement);
                         break;
                         case(4): //deconnexion
                         goto debut;

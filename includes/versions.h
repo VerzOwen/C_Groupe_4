@@ -4,9 +4,9 @@
 int mainVersions();
 void initialiserConnexion();
 void cloturerConnexion();
-void creerTables();
-void remplirTables();
-void listVersions(char listVersions[DIM][DIM], char NiceName, int nbElements, char * erreur);
+int creerTables();
+int remplirTables();
+void listVersions(char **listVersions, char NiceName, int nbElements, char * erreur);
 //void executerSQL(char *instructionSQL);
 //int insererDonnee(char *instructionSQL)
 #endif 
