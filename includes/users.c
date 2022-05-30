@@ -1,67 +1,51 @@
 #include "users.h"
 
-/*unsigned connexion(struct user connectUser){
-
-    int exist;
-    int pwd;
-    int correct;
-
-    if(exist=checkExistUser(connectUser)){
-        if(pwd=checkCorrectPassWord(connectUser)){
-            correct=2;
-        } else correct=1;
-    } else correct=0;
-
-    return correct;
-}*/
-
-
-
+//Ajoute l'utilisateur dans le fichier s'il n'existe pas déjà
 unsigned addUser(struct user newUser){
 
-    int ajout;
-    //int exist;
+    int ajout=0; //Valeur de retour: si vaut 1, l'utilisateur a été ajouté 
 
-    //exist=checkExistPlayer( addNewUser.login);
+    if(checkExistPlayer(newUser.login)==0){ //Verification que l'utilisateur qu'on souhaite ajouter n'existe pas
 
-    FILE *users=NULL;
-    users=fopen("users.txt","a+");
+        FILE *users=NULL;
+        users=fopen("users.txt","a+");
 
-        fwrite(&newUser, sizeof(newUser), 1, users);    
-        ajout = 1;
+            fwrite(&newUser, sizeof(newUser), 1, users);    
+            ajout = 1;
 
-    fclose(users);
+        fclose(users);
+    }
 
     return ajout;
 }
 
 
-// Vérifie si le login et mot de passe respecte les critères
+// Vérifie si le login  respecte les critères
 unsigned checkLogin(struct user newUser){
 
-    int correct;
+    int correct=0; //Valeur de retour: si vaut 1, le login respecte les critères
 
-    if((strlen(newUser.login) < 20) && strlen(newUser.login) > 7){
+    if((strlen(newUser.login) < 21) && strlen(newUser.login) > 7){ //Vérifie que le login fait entre 8 et 20 caractères
         correct = 1;
-    } else correct = 0;
+    } 
 
     return correct;
 }
 
-
+//Vérifie si le mdp respecte les critères
 unsigned checkPwd(struct user newUser){
     
     int correctNb=0,correctMaj=0,correct,i;
     
-    if((strlen(newUser.passWord) < 21) && strlen(newUser.passWord) > 7){
+    if((strlen(newUser.passWord) < 21) && strlen(newUser.passWord) > 7){ //Vérifie que le mdp fait entre 8 et 20 caractères
         for(i=0;i<strlen(newUser.passWord);i++){
-            if(isdigit(newUser.passWord[i])){
+            if(isdigit(newUser.passWord[i])){ //Vérifie qu'il y a au moins un chiffre dans le mdp
                 correctNb = 1;
             }
-            if(isupper(newUser.passWord[i])){
+            if(isupper(newUser.passWord[i])){ //Vérifie qu'il y a au moins une majuscule dans le mdp
                 correctMaj=1;
             }
-            if(correctNb==1 && correctMaj==1){
+            if(correctNb==1 && correctMaj==1){ //S'il y a le bon nombre de caractères, un chiffre et une majuscule le mdp est valide
                 correct=1;
                 i=strlen(newUser.passWord);
             }
@@ -113,13 +97,10 @@ unsigned checkCorrectPassWord(struct user User){
         fread(&pwdUser, sizeof(struct user), 1, users);
 
         if((strcmp(pwdUser.login, User.login))==0){
-            printf("test1");
             if((strcmp(pwdUser.passWord, User.passWord))==0) {
                 correct=1;
             } 
         }
-        //fscanf(users,"%s %s \n",pwdUser.login,pwdUser.passWord);
-         
     }
     fclose(users);
     return correct;
@@ -135,36 +116,32 @@ unsigned modifyUser(struct user User, struct user modifUser){
     FILE *users=NULL;
     FILE *modifFile=NULL;
     users=fopen("users.txt","r");
-    modifFile=fopen("delete.txt", "a+");
+    modifFile=fopen("modif.txt", "a+"); //Crée un nouveau fichier dans lequel on inscrira les données du 1er fichier avec les modifications souhaitées
     fread(&modifyUser, sizeof(struct user), 1, users);
     while(!feof(users)){
 
-
-        //fscanf(users,"%s %s \n",User.login,User.passWord);
-        
         if((strcmp(modifyUser.login, User.login))==0) {
             trouve=checkExistUser(modifUser);
             
-            if(trouve==0){
+            if(trouve==0){//l'utilisateur lu par le flux est l'utilisateur qu'on souhaite modifié
+                //on ajoute les données modifiés selon les paramètres de la fonction dans le fichier modif
                 strcpy(modifyUser.login, modifUser.login);
                 strcpy(modifyUser.passWord, modifUser.passWord);
                 fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
                 modif=1;
 
-            }   else {
+            }   
 
-                }
-
-        }   else {
-            fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile);
+        }   else {//l'utilisateur lu par le flux ne correspond pas à l'utilisateur qu'on souhaite modifié
+            fwrite(&modifyUser, sizeof(modifyUser), 1, modifFile); //on écrit les données de l'utilisateur dans le nouveau fichier
         }
         fread(&modifyUser, sizeof(struct user), 1, users);
     }
 
     fclose(users);
     fclose(modifFile);
-    remove("users.txt");
-    rename("delete.txt","users.txt");
+    remove("users.txt"); //suppression du 1er fichier sans les modifications
+    rename("modif.txt","users.txt"); //modification du nom du 2ème fichier pour qu'il corresponde au nom du 1er fichier
 
     return modif;
 }
@@ -185,22 +162,23 @@ unsigned deleteUser(struct user User){
     while(!feof(users)){
         //fscanf(users,"%s %s \n",User.login,User.passWord);
         
-        if((strcmp(delUser.login, User.login))==0) {
+        if((strcmp(delUser.login, User.login))==0) {//l'utilisateur lu par le flux est l'utilisateur qu'on souhaite supprimé
+                //on ignore l'utilisateur qu'on souhaite supprimer afin de ne pas le recopier dans le nouveau fichier
             delete=1;
-        }   else {
-            fwrite(&delUser, sizeof(delUser), 1, delFile);
+        }   else {//l'utilisateur lu par le flux ne correspond pas à l'utilisateur qu'on souhaite supprimer
+            fwrite(&delUser, sizeof(delUser), 1, delFile);//on écrit les données de l'utilisateur dans le nouveau fichier
         }
         fread(&delUser, sizeof(struct user), 1, users);
     }
 
     fclose(users);
     fclose(delFile);
-    remove("users.txt");
-    rename("delete.txt","users.txt");
+    remove("users.txt");  //suppression du 1er fichier sans les suppressions
+    rename("delete.txt","users.txt");//modification du nom du 2ème fichier pour qu'il corresponde au nom du 1er fichier
     return delete;
 }
 
-
+//Cryptage d'un mdp par décalage de bits
 char * encrypt(char *passWord)
 {
     int k;
@@ -217,7 +195,7 @@ char * encrypt(char *passWord)
     return(passWord);
 }
 
-
+//Decryptage d'un mdp par décalage de bits
 char *decrypt(char *passWord)
 {
     int k;
@@ -233,14 +211,3 @@ char *decrypt(char *passWord)
 
     return(passWord);
 }
-
-/*
-int main(){
-    struct user newUser;
-    int add;
-        printf("Entrer login : ");  scanf("%s", &newUser.login); 
-        printf("Entrer mot de passe : ");   scanf("%s", &newUser.passWord);
-        add=addUser(newUser);
-    
-
-}*/

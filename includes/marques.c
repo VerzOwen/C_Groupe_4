@@ -23,7 +23,7 @@ void initialiserConnexion()
     exit(EXIT_FAILURE);
   }
 
-  // Connect the Database and check the result
+  // Connexion à la db + contrôle du résultat
   if (!mysql_real_connect(sqlConnection, "localhost", "root",
                           NULL, NULL, 3306, NULL, 0))
   {

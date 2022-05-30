@@ -6,27 +6,28 @@
 short unsigned jsonPrimitive(char *chaineJson, char *nomAttribut, char *resultat, unsigned dim,char
 *messageErreur){
 
-    //FILE *chaineJson = fopen("marques_modeles.txt","r+");
+   
     int trouve=1, caractereCourant=0;
     char messageErreurCarAttendu[DIMERROR];
     char messageErreurLectureChaine[DIMERROR];
     char chaineLue,nomAttri;
     //Cherche l'attribut dont le nom est entré en paramètre
-    while(strcmp(nomAttri,nomAttribut)!=0){
+    while(strcmp(nomAttri,nomAttribut)!=0){//l'attribut ne correspond pas à l'attribut recherché
         lireJusqueCaractereAttendu(chaineJson,&caractereCourant,'\"',messageErreurCarAttendu);
          lectureChaine(chaineJson, caractereCourant,nomAttri,messageErreurLectureChaine);
         lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
     }
-    if(messageErreurCarAttendu[0]!=NULL){
-        strcpy(messageErreur,messageErreurCarAttendu);
+    if(messageErreurCarAttendu[0]!=NULL){//Erreur lors de la recherche de caractères
+        strcpy(messageErreur,messageErreurCarAttendu); //Affichage du message d'erreur
         trouve=0;
     } else {
+        //Lis la chaine de caractère 
         lectureChaine(chaineJson,caractereCourant,chaineLue,messageErreurLectureChaine);
-        if(messageErreurLectureChaine[0]!=NULL){
-            strcpy(messageErreur,messageErreurLectureChaine);
+        if(messageErreurLectureChaine[0]!=NULL){//Erreur lors de la lecture de la chaine
+            strcpy(messageErreur,messageErreurLectureChaine); //Affichage du message d'erreur
             trouve=0;
         } else {
-            strcpy(resultat,chaineLue);
+            strcpy(resultat,chaineLue); 
         }
     }
 
@@ -40,8 +41,9 @@ short unsigned jsonArray(char *chaineJson, char *nomAttribut, char resultats[][D
     char messageErreurCarAttendu[DIMERROR];
     char messageErreurLectureChaine[DIMERROR];
     char chaineLue,nomAttri; 
-
-     while(strcmp(nomAttri,nomAttribut)!=0){
+    
+    //Cherche l'attribut dont le nom est entré en paramètre
+     while(strcmp(nomAttri,nomAttribut)!=0){//l'attribut ne correspond pas à l'attribut recherché
         lireJusqueCaractereAttendu(chaineJson,&caractereCourant,'\"',messageErreurCarAttendu);
         lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
         lectureChaine(chaineJson, caractereCourant,nomAttri,messageErreurLectureChaine);
@@ -51,13 +53,13 @@ short unsigned jsonArray(char *chaineJson, char *nomAttribut, char resultats[][D
     while(continuer==1){
         for(i=0;i<DIM;i++){
             lireJusqueCaractereAttendu(chaineJson,&caractereCourant,':',messageErreurCarAttendu);
-            if(messageErreurCarAttendu[0]!=NULL){
-                strcpy(messageErreur,messageErreurCarAttendu);
+            if(messageErreurCarAttendu[0]!=NULL){ //Erreur lors de la recherche de caractère
+                strcpy(messageErreur,messageErreurCarAttendu); //Affichage du message d'erreur
                 trouve=0;
             } else {
                 lectureChaine(chaineJson,caractereCourant,chaineLue,messageErreurLectureChaine);
-                if(messageErreurLectureChaine[0]!=NULL){
-                    strcpy(messageErreur,messageErreurLectureChaine);
+                if(messageErreurLectureChaine[0]!=NULL){ //Erreur lors de la lecture de chaine
+                    strcpy(messageErreur,messageErreurLectureChaine); //Affichage du message d'erreur
                     trouve=0;
                 } else {
                     strcpy(resultats[j][i],chaineLue);
